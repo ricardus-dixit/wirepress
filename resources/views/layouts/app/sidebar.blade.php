@@ -15,6 +15,16 @@
                     <flux:sidebar.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                         {{ __('Dashboard') }}
                     </flux:sidebar.item>
+                    @can('create posts')
+                        <flux:sidebar.item icon="document-text" :href="route('posts.index')" :current="request()->routeIs('posts.index')" wire:navigate>
+                            {{ __('Posts') }}
+                        </flux:sidebar.item>
+                    @endcan
+                    @can('manage users')
+                        <flux:sidebar.item icon="users" :href="route('users.index')" :current="request()->routeIs('users.index')" wire:navigate>
+                            {{ __('Users') }}
+                        </flux:sidebar.item>
+                    @endcan
                 </flux:sidebar.group>
             </flux:sidebar.nav>
 
