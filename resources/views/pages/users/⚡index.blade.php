@@ -66,140 +66,102 @@ new class extends Component
     </div>
 
     <!-- Filters -->
-    <div class="mb-6 bg-white rounded-lg border border-gray-200 p-4">
-        <div class="flex flex-col sm:flex-row gap-4">
-            <div class="flex-1">
-                <input 
-                    type="text"
-                    wire:model.live.debounce.300ms="search" 
-                    placeholder="Search users..." 
-                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                />
-            </div>
+    <div class="flex flex-col sm:flex-row gap-4">
+        <div class="flex-1">
+            <flux:input 
+                type="text"
+                icon="magnifying-glass"
+                wire:model.live.debounce.300ms="search" 
+                placeholder="Search users..." 
+                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            />
+        </div>
 
-            <div class="sm:w-48">
-                <select 
-                    wire:model.live="roleFilter" 
-                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                >
-                    <option value="all">All Roles</option>
-                    @foreach($roles as $role)
-                        <option value="{{ $role->name }}">{{ ucfirst($role->name) }}</option>
-                    @endforeach
-                </select>
-            </div>
+        <div class="sm:w-48">
+            <flux:select
+                wire:model.live="roleFilter"
+                placeholder="Select roles"
+                class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            >
+                <flux:select.option value="all">All roles</flux:select.option>
+                @foreach($roles as $role)
+                    <flux:select.option value="{{ $role->name }}">{{ ucfirst($role->name) }}</flux:select.option>
+                @endforeach
+            </flux:select>
+        </div>
 
-            <div>
-                <a href="{{ route('users.create') }}" class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150">
-                    <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    New User
-                </a>
-            </div>
+        <div>
+            <flux:button
+                href="{{ route('users.create') }}"
+                icon:trailing="plus"
+                class="inline-flex items-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-md uppercase tracking-widest hover:bg-indigo-700 active:bg-indigo-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150"
+            >
+                New User
+            </flux:button>
         </div>
     </div>
 
     <!-- Success/Error Messages -->
     @if (session('success'))
-        <div class="mb-6 bg-green-50 border border-green-200 rounded-lg p-4" wire:transition>
-            <p class="text-sm text-green-800">{{ session('success') }}</p>
-        </div>
+        <flux:toast variant="success" position="top center"/>
     @endif
 
     @if (session('error'))
-        <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4" wire:transition>
-            <p class="text-sm text-red-800">{{ session('error') }}</p>
-        </div>
+        <flux:toast variant="error" position="top center" />
     @endif
 
     <!-- Users Table -->
-    <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            User
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Email
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Roles
-                        </th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Joined
-                        </th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Actions
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    @forelse($users as $user)
-                        <tr wire:key="user-{{ $user->id }}" wire:transition class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <div class="flex-shrink-0 h-10 w-10">
-                                        <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name={{ urlencode($user->name) }}&background=4f46e5&color=fff" alt="">
-                                    </div>
-                                    <div class="ml-4">
-                                        <div class="text-sm font-medium text-gray-900">{{ $user->name }}</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900">{{ $user->email }}</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex flex-wrap gap-1">
-                                    @forelse($user->roles as $role)
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-indigo-100 text-indigo-800">
-                                            {{ ucfirst($role->name) }}
-                                        </span>
-                                    @empty
-                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">
-                                            No role
-                                        </span>
-                                    @endforelse
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {{ $user->created_at->format('M d, Y') }}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                <div class="flex justify-end gap-2">
-                                    <a href="{{ route('users.edit', $user) }}" class="text-indigo-600 hover:text-indigo-900">
-                                        Edit
-                                    </a>
-                                    
-                                    @if($user->id !== auth()->id())
-                                        <button 
-                                            wire:click="deleteUser({{ $user->id }})"
-                                            wire:confirm="Are you sure you want to delete this user?"
-                                            class="text-red-600 hover:text-red-900"
-                                        >
-                                            Delete
-                                        </button>
-                                    @endif
-                                </div>
-                            </td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="px-6 py-12 text-center text-gray-500">
-                                No users found.
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <div class="overflow-x-auto">
+        <flux:table :paginate="$users">
+            <flux:table.columns>
+                <flux:table.column>User</flux:table.column>
+                <flux:table.column>Email</flux:table.column>
+                <flux:table.column>Roles</flux:table.column>
+                <flux:table.column>Joined</flux:table.column>
+                <flux:table.column>Actions</flux:table.column>
+            </flux:table.columns>
 
-    <!-- Pagination -->
-    <div class="mt-6">
-        {{ $users->links() }}
+            <flux:table.rows>
+                @forelse($users as $user)
+                    <flux:table.row wire:key="user-{{ $user->id }}">
+                        <flux:table.cell class="flex items-center gap-3">
+                            <flux:avatar size="xs" name="{{ $user->name }}" />
+
+                            {{ $user->name}}
+                        </flux:table.cell>
+
+                        <flux:table.cell class="whitespace-nowrap">{{ $user->email }}</flux:table.cell>
+
+                        <flux:table.cell>
+                            @forelse($user->roles as $role)
+                                <flux:badge size="sm" inset="top bottom">{{ ucfirst($role->name) }}</flux:badge>
+                            @empty
+                                <flux:badge size="sm" inset="top bottom">No Role</flux:badge>
+                            @endforelse
+                        </flux:table.cell>
+
+                        <flux:table.cell>{{ $user->created_at->format('M d, Y') }}</flux:table.cell>
+
+                        <flux:table.cell>
+                            <flux:dropdown>
+                                <flux:button variant="ghost" size="sm" icon="ellipsis-horizontal" inset="top bottom"></flux:button>
+
+                                <flux:menu>
+                                    <flux:menu.item href="{{ route('users.edit', $user) }}" icon="pencil-square" kbd="⌘E">Edit</flux:menu.item>
+
+                                    @if($user->id !== auth()->id())
+                                        <flux:menu.item wire:click="deleteUser({{ $user->id }})" wire:confirm="Are you sure you want to delete this user?" icon="trash" kbd="⌘D">Delete</flux:menu.item>
+                                    @endif
+                                </flux:menu>
+                            </flux:dropdown>
+                        </flux:table.cell>
+                    </flux:table.row>
+                @empty
+                    <flux:table.row class="text-center">
+                        No users found
+                    </flux:table.row>
+                @endforelse
+            </flux:table.rows>
+        </flux:table>
     </div>
 </div>
