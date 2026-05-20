@@ -3,6 +3,7 @@
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\User;
+use Flux\Flux;
 use Spatie\Permission\Models\Role;
 
 new class extends Component
@@ -54,7 +55,12 @@ new class extends Component
         }
 
         $user->delete();
-        session()->flash('success', 'User deleted successfully!');
+
+        Flux::toast(
+            variant: 'success',
+            position: 'top center',
+            heading: 'User deleted successfully!'
+        );
     }
 };
 ?>
@@ -80,7 +86,6 @@ new class extends Component
         <div class="sm:w-48">
             <flux:select
                 wire:model.live="roleFilter"
-                placeholder="Select roles"
                 class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             >
                 <flux:select.option value="all">All roles</flux:select.option>
@@ -111,7 +116,7 @@ new class extends Component
     @endif
 
     <!-- Users Table -->
-    <div class="overflow-x-auto">
+    <div class="overflow-x-auto mt-6">
         <flux:table :paginate="$users">
             <flux:table.columns>
                 <flux:table.column>User</flux:table.column>
@@ -158,7 +163,7 @@ new class extends Component
                     </flux:table.row>
                 @empty
                     <flux:table.row class="text-center">
-                        No users found
+                        <flux:table.cell colspan="5">No users found</flux:table.cell>
                     </flux:table.row>
                 @endforelse
             </flux:table.rows>
