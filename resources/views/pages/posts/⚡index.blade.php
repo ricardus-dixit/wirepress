@@ -159,7 +159,6 @@ new class extends Component
                                     'published' => 'green',
                                     'draft' => 'yellow',
                                     'archived' => 'zinc',
-                                    default => 'zinc',
                                 }"
                             >
                                 {{ ucfirst($post->status) }}
