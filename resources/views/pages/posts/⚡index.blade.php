@@ -33,7 +33,7 @@ new class extends Component
         // Authorization: Author only see own posts
         if (auth()->user()->hasRole('author'))
         {
-            $query->where('user_id', auth()->id);
+            $query->where('user_id', auth()->id());
         }
 
         return [
@@ -112,7 +112,7 @@ new class extends Component
 
     {{-- Success Message --}}
     @if (session('success'))
-        <d<flux:toast variant="success" position="top center"/>
+        <flux:toast variant="success" position="top center" />
     @endif
 
     {{-- posts table --}}

@@ -223,31 +223,26 @@ new class extends Component
 
         <!-- Status -->
         <flux:radio.group
+            wire:model="status"
             label="Status"
         >
-            <flux:radio 
-                name="draft"
+            <flux:radio
                 value="draft"
                 label="Draft"
                 description="A short description to draft posts"
-                wire:model="status"
             />
 
             @can('publish posts')
                 <flux:radio
-                    name="published"
                     value="published"
                     label="Published"
                     description="A description to published posts"
-                    wire:model="status"
                 />
 
                 <flux:radio
-                    name="archived"
                     value="archived"
                     label="Archived"
                     description="Another description to archived posts"
-                    wire:model="status"
                 />
             @endcan
         </flux:radio.group>

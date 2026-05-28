@@ -49,6 +49,8 @@ new class extends Component
 
          $post->save();
 
+         
+
          session()->flash('success', 'Post created successfully!');
 
          $this->redirect(route('posts.index'), true);
@@ -153,23 +155,20 @@ new class extends Component
 
         <!-- Status -->
         <flux:radio.group
+            wire:model="status"
             label="Status"
         >
-            <flux:radio 
-                name="draft"
+            <flux:radio
                 value="draft"
                 label="Draft"
                 description="Save as draft, not visible to readers"
-                wire:model="status"
             />
 
             @can('publish posts')
-                <flux:radio 
-                    name="published"
+                <flux:radio
                     value="published"
                     label="Published"
                     description="Publish immediately, visible to all readers"
-                    wire:model="status"
                 />
             @endcan
         </flux:radio.group>
