@@ -14,7 +14,7 @@ new class extends Component
 
     public function with(): array
     {
-        $query = Post::with('users')->latest();
+        $query = Post::with('user')->latest();
 
         // Filter by search
         if ($this->search)
@@ -120,7 +120,7 @@ new class extends Component
         <flux:table :paginate="$posts">
             <flux:table.columns>
                 <flux:table.column>Title</flux:table.column>
-                <flux:table.column>Categories</flux:table.column>
+                {{-- <flux:table.column>Categories</flux:table.column> --}}
                 <flux:table.column>Author</flux:table.column>
                 <flux:table.column>Status</flux:table.column>
                 <flux:table.column>Created</flux:table.column>
@@ -145,13 +145,13 @@ new class extends Component
                             </div>
                             @endif
                         </flux:table.cell>
-                        <flux:table.cell>
+                        {{-- <flux:table.cell>
                             @forelse($post->categories as $category)
                                 <flux:badge color="{{ $category->color }}">{{ $category->name }}</flux:badge>
                             @empty
                                 <flux:badge color="gray">No category</flux:badge>
                             @endforelse
-                        </flux:table.cell>
+                        </flux:table.cell> --}}
                         <flux:table.cell>{{ $post->user->name }}</flux:table.cell>
                         <flux:table.cell>
                             <flux:badge
