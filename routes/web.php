@@ -14,7 +14,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::livewire('posts/create', 'pages::posts.create')
         ->middleware('can:create posts')
         ->name('posts.create');
-    Route::livewire('posts/edit', 'pages::posts.edit')
+    Route::livewire('posts/{post}/edit', 'pages::posts.edit')
         ->name('posts.edit');
     Route::livewire('posts/show/{id}', 'pages::posts.show')->name('posts.show');
 
